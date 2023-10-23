@@ -94,9 +94,18 @@ main {
     transition: 250ms;
 }
 
+.selections-container h2 {
+    transition: 250ms;
+}
+
 .selection-button:hover {
     cursor: pointer;
-    background-color: #8f69bb
+    background-color: #8f69bb;
+    transform: scale(0.95);
+}
+
+.selection-button:hover+h2 {
+    color: #B0A8B9;
 }
 
 .selection-img {
