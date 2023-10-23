@@ -78,6 +78,24 @@ main {
     background-color: #EDEDED;
 }
 
+.scoreboards {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    gap: 5rem;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    width: 50%;
+    background-color: #2E2E2E;
+    border: solid 3px #8f69bb;
+    border-radius: 20px;
+    color: white;
+}
+
 .selections-container {
     display: flex;
     justify-content: center;

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let computerSelection = "";
 
   const selectionButtons = document.querySelectorAll('.selection-button');
+  const displayedPlayerScore = document.querySelector('.player-score');
+  const displayedComputerScore = document.querySelector('.computer-score');
 
   selectionButtons.forEach(button => {
     button.addEventListener('click', () => game(button.value));
@@ -28,12 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playRound(playerSelection, computerSelection);
 
-    console.log(`The player score is: ${playerScore}`);
-    console.log(`The computer score is: ${computerScore}`);
-
-
-    console.log(`Final player score: ${playerScore}`);
-    console.log(`Final computer score: ${computerScore}`);
+    displayedPlayerScore.innerText = playerScore;
+    displayedComputerScore.innerText = computerScore;
 
     if (playerScore > computerScore) {
       console.log(`Player wins!`);
