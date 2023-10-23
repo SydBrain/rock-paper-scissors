@@ -13,10 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const selectionsContainer = document.querySelector('.selections-container');
+  const scoreboardsContainer = document.querySelector('.scoreboards-container');
+  const feedbackContainer = document.querySelector('.feedback-container');
+  const resultContainer = document.querySelector('.result-container');
+  const startGameContainer = document.querySelector('.start-game-container');
+
   const startGameButton = document.querySelector('.start-button');
+  const resetGameButton = document.querySelector('.reset-button');
+
   const displayedPlayerScore = document.querySelector('.player-score');
   const displayedComputerScore = document.querySelector('.computer-score');
-  const displayedResult = document.querySelector('.result');
+
+  const playerIcon = document.querySelector('.player-icon');
+  const computerIcon = document.querySelector('.computer-icon');
+
   const roundOutcome = document.querySelector('.round-outcome')
 
   const choices = ["rock", "paper", "scissors"];
@@ -28,49 +38,62 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   startGameButton.addEventListener('click', () => {
-    startGameButton.classList.add('hidden');
+    startGameContainer.classList.add('hidden');
     selectionsContainer.classList.remove('hidden');
+    scoreboardsContainer.classList.remove('hidden');
     startGame();
   });
 
-  function startGame() {
+  resetGameButton.addEventListener('click', () => {
+    resetGame();
+  });
 
+  selectionButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      playerSelection = e.target.parentNode.value;
+      computerSelection = getComputerChoice();
+
+      if (playerSelection && computerSelection) {
+        playRound(playerSelection, computerSelection);
+      }
+
+      displayedPlayerScore.innerText = playerScore;
+      displayedComputerScore.innerText = computerScore;
+      checkWinner();
+    });
+  });
+
+  function startGame() {
     playerScore = 0;
     computerScore = 0;
+
+    feedbackContainer.classList.remove('hidden');
 
     displayedPlayerScore.innerText = playerScore;
     displayedComputerScore.innerText = computerScore;
 
-    selectionButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        playerSelection = e.target.parentNode.value;
-        computerSelection = getComputerChoice();
-
-        playRound(playerSelection, computerSelection);
-
-        displayedPlayerScore.innerText = playerScore;
-        displayedComputerScore.innerText = computerScore;
-        checkWinner();
-      });
-    });
   }
 
   function checkWinner() {
     if (playerScore === 5 || computerScore === 5) {
+      resetGameButton.classList.remove('hidden');
+      resultContainer.classList.remove('hidden');
+
       if (playerScore > computerScore) {
-        displayedResult.innerText = playerWins;
+        resultContainer.innerText = playerWins;
       } else if (playerScore < computerScore) {
-        displayedResult.innerText = computerWins;
+        resultContainer.innerText = computerWins;
       } else {
-        displayedResult.innerText = itsADraw;
+        resultContainer.innerText = itsADraw;
       }
     }
   }
 
   function playRound(playerSelection, computerSelection) {
     roundOutcome.innerText = "";
-    playerSelection.charAt(0).toUpperCase();
-    computerSelection.charAt(0).toUpperCase();
+
+    playerIcon.src = `./assets/images/${playerSelection}.png`;
+    computerIcon.src = `./assets/images/${computerSelection}.png`;
 
     if (playerSelection === computerSelection) {
       roundOutcome.innerText = `It's a draw!`;
@@ -93,6 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getComputerChoice() {
     return choices[Math.floor(Math.random() * 3)];
+  }
+
+  function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    displayedPlayerScore.innerText = playerScore;
+    displayedComputerScore.innerText = computerScore;
+    playerIcon.src = "";
+    computerIcon.src = "";
+    resultContainer.innerText = "";
+    roundOutcome.innerText = "";
+    selectionsContainer.classList.add('hidden');
+    scoreboardsContainer.classList.add('hidden');
+    resultContainer.classList.add('hidden');
+    feedbackContainer.classList.add('hidden');
+    startGameContainer.classList.remove('hidden');
+    resetGameButton.classList.add('hidden');
   }
 
 })

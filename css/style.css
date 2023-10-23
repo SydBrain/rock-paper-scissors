@@ -73,12 +73,15 @@ h6 {
 
 main {
     height: 100vh;
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 5rem;
     background-color: #EDEDED;
 }
 
-.scoreboards {
+.scoreboards-container {
     display: flex;
     align-items: center;
     width: 50%;
@@ -130,11 +133,30 @@ main {
     width: 200px;
 }
 
+.feedback-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feedback-icon {
+    width: 100px;
+    height: auto;
+    transition: 300ms;
+}
+
 .hidden {
     display: none;
 }
 
-.start-button {
+.start-button,
+.reset-button {
     padding: 1rem 2rem;
     background-color: #8f69bb;
     border: solid 3px #bdb1ca;
@@ -143,7 +165,8 @@ main {
     transition: 400ms;
 }
 
-.start-button:hover {
+.start-button:hover,
+.reset-button:hover {
     cursor: pointer;
     background-color: #bdb1ca;
     border: solid 3px #8f69bb;
