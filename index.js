@@ -20,7 +20,7 @@ function game() {
     playerSelection = "";
     computerSelection = "";
 
-    while (!choices.includes(playerSelection)) {
+    /* while (!choices.includes(playerSelection)) {
       playerSelection = prompt(`Rock, Paper or Scissors?`).toLowerCase().trim();
 
       if (!choices.includes(playerSelection)) {
@@ -28,7 +28,7 @@ function game() {
           `Invalid input, you have to choose between Rock, Paper or Scissors!`
         );
       }
-    }
+    } */
 
     computerSelection = getComputerChoice();
 
