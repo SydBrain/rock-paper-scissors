@@ -129,3 +129,22 @@ main {
 .selection-img {
     width: 200px;
 }
+
+.hidden {
+    display: none;
+}
+
+.start-button {
+    padding: 1rem 2rem;
+    background-color: #8f69bb;
+    border: solid 3px #bdb1ca;
+    border-radius: 20px;
+    color: white;
+    transition: 400ms;
+}
+
+.start-button:hover {
+    cursor: pointer;
+    background-color: #bdb1ca;
+    border: solid 3px #8f69bb;
+}
