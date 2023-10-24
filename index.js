@@ -18,11 +18,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectElements = selectors => selectors.map(selector => document.querySelector(selector));
 
   const selectionButtons = document.querySelectorAll('.selection-button');
-  const [selectionsContainer, scoreboardsContainer, feedbackContainer, resultContainer, startGameContainer] =
-    selectElements(['.selections-container', '.scoreboards-container', '.feedback-container', '.result-container', '.start-game-container']);
-  const [startGameButton, resetGameButton, displayedPlayerScore, displayedComputerScore, playerIcon, computerIcon,
-    roundOutcome, endingModal, endgameMessage, overlay] =
-    selectElements(['.start-button', '.reset-button', '.player-score', '.computer-score', '.player-icon', '.computer-icon', '.round-outcome', '#ending_modal', '#endgame_message', '#overlay']);
+  const [selectionsContainer, scoreboardsContainer, feedbackContainer, resultContainer,
+    startGameContainer] =
+    selectElements(['.selections-container', '.scoreboards-container', '.feedback-container', '.result-container',
+      '.start-game-container']);
+  const [startGameButton, resetGameButton, displayedPlayerScore, displayedComputerScore,
+    playerIcon, computerIcon, roundOutcome, endingModal,
+    endgameMessage, overlay] =
+    selectElements(['.start-button', '.reset-button', '.player-score', '.computer-score',
+      '.player-icon', '.computer-icon', '.round-outcome', '#ending_modal',
+      '#endgame_message', '#overlay']);
+
+  // Utility Functions
+  const toggleClass = (element, className, action) => element.classList[action](className);
+  const updateText = (element, text) => element.innerText = text;
+  const updateImageSource = (element, src) => element.src = src;
+  const toggleGameVisibility = (isHidden) => {
+    const action = isHidden ? 'add' : 'remove';
+    toggleClass(selectionsContainer, 'hidden', action);
+    toggleClass(scoreboardsContainer, 'hidden', action);
+    toggleClass(feedbackContainer, 'hidden', action);
+    toggleClass(startGameContainer, 'hidden', isHidden ? 'remove' : 'add');
+  };
 
   // Event Listeners
   startGameButton.addEventListener('click', initializeGame);
@@ -31,12 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Game
   function initializeGame() {
-    playerScore = 0;
-    computerScore = 0;
-    startGameContainer.classList.add('hidden');
-    selectionsContainer.classList.remove('hidden');
-    scoreboardsContainer.classList.remove('hidden');
-    feedbackContainer.classList.remove('hidden');
+    resetScores();
+    toggleGameVisibility(false);
     updateScoreboard();
   }
 
@@ -51,23 +64,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateScoreboard() {
-    displayedPlayerScore.innerText = playerScore;
-    displayedComputerScore.innerText = computerScore;
+    updateText(displayedPlayerScore, playerScore);
+    updateText(displayedComputerScore, computerScore);
   }
 
   function checkWinner() {
     if (playerScore === 5 || computerScore === 5) {
-      resetGameButton.classList.remove('hidden');
-      resultContainer.classList.remove('hidden');
+      toggleClass(resetGameButton, 'hidden', 'remove');
+      toggleClass(resultContainer, 'hidden', 'remove');
 
       if (playerScore > computerScore) {
-        resultContainer.innerText = playerWins;
+        updateText(resultContainer, playerWins);
         gameResult = playerWins;
       } else if (playerScore < computerScore) {
-        resultContainer.innerText = computerWins;
+        updateText(resultContainer, computerWins);
         gameResult = computerWins;
       } else {
-        resultContainer.innerText = itsADraw;
+        updateText(resultContainer, itsADraw);
         gameResult = itsADraw;
       }
 
@@ -76,24 +89,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playRound(playerSelection, computerSelection) {
-    roundOutcome.innerText = "";
+    updateText(roundOutcome, "");
 
-    playerIcon.src = `./assets/images/${playerSelection}.png`;
-    computerIcon.src = `./assets/images/${computerSelection}.png`;
+    updateImageSource(playerIcon, `./assets/images/${playerSelection}.png`);
+    updateImageSource(computerIcon, `./assets/images/${computerSelection}.png`);
 
     if (playerSelection === computerSelection) {
-      roundOutcome.innerText = `It's a draw!`;
+      updateText(roundOutcome, `It's a draw!`);
       return;
     }
 
     if (outcomes[playerSelection].win === computerSelection) {
-      roundOutcome.innerText = `You won! ${playerSelection} beats ${computerSelection}`;
+      updateText(roundOutcome, `You won! ${playerSelection} beats ${computerSelection}`);
       playerScore += 1;
       return;
     }
 
     if (outcomes[playerSelection].lose === computerSelection) {
-      roundOutcome.innerText = `You lose! ${computerSelection} beats ${playerSelection}`;
+      updateText(roundOutcome, `You lose! ${computerSelection} beats ${playerSelection}`);
       computerScore += 1;
       return;
     }
@@ -104,34 +117,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return choices[Math.floor(Math.random() * 3)];
   }
 
+  // Resets
   function resetGame() {
-    playerScore = 0;
-    computerScore = 0;
-    displayedPlayerScore.innerText = playerScore;
-    displayedComputerScore.innerText = computerScore;
-    playerIcon.src = "";
-    computerIcon.src = "";
-    resultContainer.innerText = "";
-    roundOutcome.innerText = "";
-    selectionsContainer.classList.add('hidden');
-    scoreboardsContainer.classList.add('hidden');
-    resultContainer.classList.add('hidden');
-    feedbackContainer.classList.add('hidden');
-    startGameContainer.classList.remove('hidden');
-    resetGameButton.classList.add('hidden');
+    resetScores();
+    updateScoreboard();
+    updateImageSource(playerIcon, "");
+    updateImageSource(computerIcon, "");
+    updateText(resultContainer, "");
+    updateText(roundOutcome, "");
+    toggleGameVisibility(true);
+    toggleClass(resetGameButton, 'hidden', 'add');
     closeEndingModal();
   }
 
+  function resetScores() {
+    playerScore = 0;
+    computerScore = 0;
+  }
+
+  // Modal
   function openEndingModal(gameResult) {
-    endingModal.classList.add('active');
-    overlay.classList.add('active');
-    endgameMessage.innerText = gameResult;
+    toggleClass(endingModal, 'active', 'add');
+    toggleClass(overlay, 'active', 'add');
+    updateText(endgameMessage, gameResult);
   }
 
   function closeEndingModal() {
-    endingModal.classList.remove('active');
-    overlay.classList.remove('active');
-    endgameMessage.innerText = "";
+    toggleClass(endingModal, 'active', 'remove');
+    toggleClass(overlay, 'active', 'remove');
+    updateText(endgameMessage, "");
   }
 
 })
