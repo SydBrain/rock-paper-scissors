@@ -11,6 +11,9 @@
 
 <body>
     <main>
+        <header class="header">
+            <h1>Rock, Paper, Scissors</h1>
+        </header>
         <div class="scoreboards-container hidden">
             <div class="scoreboard">
                 <span>PLAYER SCORE</span>
@@ -51,7 +54,11 @@
                 <h2>SCISSORS</h2>
             </div>
         </div>
-        <button class="reset-button hidden">RESET GAME</button>
+        <div class="modal" id="ending_modal">
+            <h3 class="modal-title" id="endgame_message"></h3>
+            <button class="reset-button hidden">RESET GAME</button>
+        </div>
+        <div id="overlay"></div>
     </main>
 </body>
 

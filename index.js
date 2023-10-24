@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let playerSelection = "";
   let computerSelection = "";
 
+  let gameResult = "";
+
   const playerWins = "Player Wins!";
   const computerWins = "Computer Wins!";
   const itsADraw = "It's a Draw!";
@@ -28,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const computerIcon = document.querySelector('.computer-icon');
 
   const roundOutcome = document.querySelector('.round-outcome')
+
+  const endingModal = document.getElementById('ending_modal');
+  const endgameMessage = document.getElementById('endgame_message');
+  const overlay = document.getElementById('overlay');
 
   const choices = ["rock", "paper", "scissors"];
 
@@ -81,11 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (playerScore > computerScore) {
         resultContainer.innerText = playerWins;
+        gameResult = playerWins;
       } else if (playerScore < computerScore) {
         resultContainer.innerText = computerWins;
+        gameResult = computerWins;
       } else {
         resultContainer.innerText = itsADraw;
+        gameResult = itsADraw;
       }
+
+      openEndingModal(gameResult);
     }
   }
 
@@ -133,6 +144,19 @@ document.addEventListener('DOMContentLoaded', () => {
     feedbackContainer.classList.add('hidden');
     startGameContainer.classList.remove('hidden');
     resetGameButton.classList.add('hidden');
+    closeEndingModal();
+  }
+
+  function openEndingModal(gameResult) {
+    endingModal.classList.add('active');
+    overlay.classList.add('active');
+    endgameMessage.innerText = gameResult;
+  }
+
+  function closeEndingModal() {
+    endingModal.classList.remove('active');
+    overlay.classList.remove('active');
+    endgameMessage.innerText = "";
   }
 
 })
