@@ -1,83 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
-  let playerScore;
-  let computerScore;
 
-  let playerSelection = "";
-  let computerSelection = "";
+  // Game Variables
+  let playerScore, computerScore, playerSelection, computerSelection, gameResult;
 
-  let gameResult = "";
-
+  // Game Constants
   const playerWins = "Player Wins!";
   const computerWins = "Computer Wins!";
   const itsADraw = "It's a Draw!";
-
-  const selectionButtons = document.querySelectorAll('.selection-button');
-
-
-  const selectionsContainer = document.querySelector('.selections-container');
-  const scoreboardsContainer = document.querySelector('.scoreboards-container');
-  const feedbackContainer = document.querySelector('.feedback-container');
-  const resultContainer = document.querySelector('.result-container');
-  const startGameContainer = document.querySelector('.start-game-container');
-
-  const startGameButton = document.querySelector('.start-button');
-  const resetGameButton = document.querySelector('.reset-button');
-
-  const displayedPlayerScore = document.querySelector('.player-score');
-  const displayedComputerScore = document.querySelector('.computer-score');
-
-  const playerIcon = document.querySelector('.player-icon');
-  const computerIcon = document.querySelector('.computer-icon');
-
-  const roundOutcome = document.querySelector('.round-outcome')
-
-  const endingModal = document.getElementById('ending_modal');
-  const endgameMessage = document.getElementById('endgame_message');
-  const overlay = document.getElementById('overlay');
-
   const choices = ["rock", "paper", "scissors"];
-
   const outcomes = {
     rock: { win: "scissors", lose: "paper" },
     paper: { win: "rock", lose: "scissors" },
     scissors: { win: "paper", lose: "rock" },
   };
 
-  startGameButton.addEventListener('click', () => {
+  // DOM Elements
+  const selectElements = selectors => selectors.map(selector => document.querySelector(selector));
+
+  const selectionButtons = document.querySelectorAll('.selection-button');
+  const [selectionsContainer, scoreboardsContainer, feedbackContainer, resultContainer, startGameContainer] =
+    selectElements(['.selections-container', '.scoreboards-container', '.feedback-container', '.result-container', '.start-game-container']);
+  const [startGameButton, resetGameButton, displayedPlayerScore, displayedComputerScore, playerIcon, computerIcon,
+    roundOutcome, endingModal, endgameMessage, overlay] =
+    selectElements(['.start-button', '.reset-button', '.player-score', '.computer-score', '.player-icon', '.computer-icon', '.round-outcome', '#ending_modal', '#endgame_message', '#overlay']);
+
+  // Event Listeners
+  startGameButton.addEventListener('click', initializeGame);
+  resetGameButton.addEventListener('click', resetGame);
+  selectionButtons.forEach(button => button.addEventListener('click', handlePlayerChoice));
+
+  // Game
+  function initializeGame() {
+    playerScore = 0;
+    computerScore = 0;
     startGameContainer.classList.add('hidden');
     selectionsContainer.classList.remove('hidden');
     scoreboardsContainer.classList.remove('hidden');
-    startGame();
-  });
-
-  resetGameButton.addEventListener('click', () => {
-    resetGame();
-  });
-
-  selectionButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      playerSelection = e.target.parentNode.value;
-      computerSelection = getComputerChoice();
-
-      if (playerSelection && computerSelection) {
-        playRound(playerSelection, computerSelection);
-      }
-
-      displayedPlayerScore.innerText = playerScore;
-      displayedComputerScore.innerText = computerScore;
-      checkWinner();
-    });
-  });
-
-  function startGame() {
-    playerScore = 0;
-    computerScore = 0;
-
     feedbackContainer.classList.remove('hidden');
+    updateScoreboard();
+  }
 
+  function handlePlayerChoice(e) {
+    playerSelection = e.target.parentNode.value;
+    computerSelection = getComputerChoice();
+    if (playerSelection && computerSelection) {
+      playRound(playerSelection, computerSelection);
+      updateScoreboard();
+      checkWinner();
+    }
+  }
+
+  function updateScoreboard() {
     displayedPlayerScore.innerText = playerScore;
     displayedComputerScore.innerText = computerScore;
-
   }
 
   function checkWinner() {
